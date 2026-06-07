@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Insight News Editor",
+  "description": "실시간 뉴스 링크를 분석하여 전문적인 비즈니스 뉴스레터로 변환해주는 뉴스 인사이트 분석 도구",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
