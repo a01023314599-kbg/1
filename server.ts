@@ -45,7 +45,8 @@ async function startServer() {
       return res.status(400).json({ error: "URL is required" });
     }
 
-    const cleanUrl = url.trim().toLowerCase();
+    const cleanUrl = url.trim();
+    const lowerCleanUrl = cleanUrl.toLowerCase();
 
     // Define smart handlers for target preset domains
     const PRESET_MAPPING: { 
@@ -91,15 +92,15 @@ async function startServer() {
     // Check if the requested URL is just a homepage/root or domain level request for presets
     let matchedPreset = null;
     for (const key of Object.keys(PRESET_MAPPING)) {
-      if (cleanUrl.includes(key)) {
-        // If it's a domain homepage or general routing, trigger smart deep-fetch
-        // Root includes paths consisting only of trailing slash, or simple subdirectories like /en, etc.
-        const pathPart = cleanUrl.replace(/https?:\/\/(www\.)?/, "").replace(key, "").replace(/^\//, "");
-        if (pathPart.length <= 4) { // / or empty or /en/ etc.
-          matchedPreset = PRESET_MAPPING[key];
-          break;
-        }
-      }
+       if (lowerCleanUrl.includes(key)) {
+         // If it's a domain homepage or general routing, trigger smart deep-fetch
+         // Root includes paths consisting only of trailing slash, or simple subdirectories like /en, etc.
+         const pathPart = lowerCleanUrl.replace(/https?:\/\/(www\.)?/, "").replace(key, "").replace(/^\//, "");
+         if (pathPart.length <= 4) { // / or empty or /en/ etc.
+           matchedPreset = PRESET_MAPPING[key];
+           break;
+         }
+       }
     }
 
     if (matchedPreset) {
