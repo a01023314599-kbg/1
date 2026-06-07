@@ -195,9 +195,10 @@ export default function App() {
 
         const cleanUrl = source.url.trim();
         try {
-          // 모바일 하이브리드 앱(WebView/PWA) 환경에서 가상 오리진(file://, app:// 등)에 의해 기기 로컬 404 HTML을 주소로 보려하는 현상을 방지하기 위해 실서버 절대주소를 안전장치로 확보합니다.
+          // 모바일 하드웨어 앱(WebView/PWA) 환경 또는 Vercel/GitHub Pages 등 타 도메인에 호스팅되었을 때 실제 백엔드 서버(Cloud Run)를 명확히 바라보도록 도메인을 동적 교정합니다.
           let origin = window.location.origin;
-          if (!origin || !origin.startsWith('http') || origin.includes('file:')) {
+          const isAISHost = origin.includes('run.app') || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('0.0.0.0');
+          if (!isAISHost || !origin || !origin.startsWith('http') || origin.includes('file:')) {
             origin = 'https://ais-pre-y635c2eyq47c56bueaemp5-224346385041.asia-east1.run.app';
           }
           const apiUrl = `${origin}/api/fetch-news`;
@@ -260,7 +261,8 @@ export default function App() {
 
       // 2. Call the server-side analysis endpoint
       let origin = window.location.origin;
-      if (!origin || !origin.startsWith('http') || origin.includes('file:')) {
+      const isAISHost = origin.includes('run.app') || origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('0.0.0.0');
+      if (!isAISHost || !origin || !origin.startsWith('http') || origin.includes('file:')) {
         origin = 'https://ais-pre-y635c2eyq47c56bueaemp5-224346385041.asia-east1.run.app';
       }
       const analyzeUrl = `${origin}/api/analyze-news`;
