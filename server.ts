@@ -31,12 +31,12 @@ function getGeminiClient(): GoogleGenAI {
   return aiClient;
 }
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-  app.use(cors());
-  app.use(express.json());
+async function startServer() {
+  const PORT = 3000;
 
   // API Route: Fetch News Content
   app.post("/api/fetch-news", async (req, res) => {
@@ -486,9 +486,13 @@ ${sourceContext}
     app.use(vite.middlewares);
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export { app };
